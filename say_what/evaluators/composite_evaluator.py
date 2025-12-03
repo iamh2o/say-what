@@ -1,6 +1,6 @@
 """Composite evaluator that combines multiple evaluation strategies."""
 
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Tuple
 from .base import Evaluator
 from ..benchmarks.base import Question
 
@@ -8,7 +8,7 @@ from ..benchmarks.base import Question
 class CompositeEvaluator(Evaluator):
     """Combines multiple evaluators with weighted averaging."""
     
-    def __init__(self, evaluators: List[tuple[Evaluator, float]]):
+    def __init__(self, evaluators: List[Tuple[Evaluator, float]]):
         """Initialize composite evaluator.
         
         Args:
@@ -23,7 +23,7 @@ class CompositeEvaluator(Evaluator):
         """Return the name of this evaluator."""
         return "CompositeEvaluator"
     
-    def evaluate(self, question: Question, answer: str) -> tuple[float, Dict[str, Any]]:
+    def evaluate(self, question: Question, answer: str) -> Tuple[float, Dict[str, Any]]:
         """Evaluate using all sub-evaluators and combine scores.
         
         Args:

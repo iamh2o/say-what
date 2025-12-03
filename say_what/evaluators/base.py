@@ -1,7 +1,7 @@
 """Base class for answer evaluators."""
 
 from abc import ABC, abstractmethod
-from typing import Dict, Any
+from typing import Dict, Any, Tuple
 from ..benchmarks.base import Question
 
 
@@ -9,7 +9,7 @@ class Evaluator(ABC):
     """Abstract base class for evaluating AI responses."""
     
     @abstractmethod
-    def evaluate(self, question: Question, answer: str) -> tuple[float, Dict[str, Any]]:
+    def evaluate(self, question: Question, answer: str) -> Tuple[float, Dict[str, Any]]:
         """Evaluate an AI's answer to a question.
         
         Args:

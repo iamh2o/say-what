@@ -1,6 +1,6 @@
 """Keyword-based evaluator."""
 
-from typing import Dict, Any
+from typing import Dict, Any, Tuple
 from .base import Evaluator
 from ..benchmarks.base import Question
 
@@ -12,7 +12,7 @@ class KeywordEvaluator(Evaluator):
         """Return the name of this evaluator."""
         return "KeywordEvaluator"
     
-    def evaluate(self, question: Question, answer: str) -> tuple[float, Dict[str, Any]]:
+    def evaluate(self, question: Question, answer: str) -> Tuple[float, Dict[str, Any]]:
         """Evaluate an answer based on keyword presence.
         
         Args:
