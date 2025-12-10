@@ -1,3 +1,174 @@
+```mermaid
+erDiagram
+  ORGANIZATION ||--o{ CONTACT : has
+  ORGANIZATION ||--o{ REQUISITION : submits
+  CONTACT ||--o{ REQUISITION : orders_for
+  PATIENT ||--o{ REQUISITION : subject_of
+
+  REQUISITION ||--|{ SPECIMEN_TUBE : contains
+  KIT ||--|{ SPECIMEN_TUBE : includes
+  SPECIMEN_TUBE ||--o{ ALIQUOT : yields
+
+  REQUISITION ||--o{ PRODUCT_ORDER : requests
+  PRODUCT ||--o{ PRODUCT_ORDER : line_item
+  PRODUCT_ORDER ||--|| WORK_ORDER : instantiates
+
+  WORK_ORDER ||--|{ WORK_SET : groups
+  WORK_SET ||--|{ WORK_TASK : contains
+  WORK_TASK ||--o{ LIMS_RECORD : creates
+
+  LIMS_RECORD ||--o{ QC_RESULT : has
+  LIMS_RECORD ||--o{ INSTRUMENT_RUN : references
+  INSTRUMENT_RUN ||--o{ DATA_ASSET : emits
+
+  ANALYSIS_RUN }o--o{ DATA_ASSET : consumes_produces
+  ANALYSIS_RUN ||--o{ QC_RESULT : generates
+  ANALYSIS_RUN ||--o{ REPORT : results_in
+
+  DATA_ASSET ||--|| STORAGE_LOCATION : stored_at
+
+  DEVIATION }o--o{ WORK_TASK : relates_to
+  DEVIATION }o--o{ LIMS_RECORD : relates_to
+  INVENTORY_ITEM }o--o{ WORK_TASK : consumed_by
+  PURCHASE_ORDER ||--|{ INVENTORY_ITEM : buys
+
+  ORGANIZATION {
+    string org_id PK
+    string name
+    string type
+  }
+  CONTACT {
+    string contact_id PK
+    string org_id FK
+    string role
+    string email
+  }
+  PATIENT {
+    string patient_id PK
+    string phi_ref
+  }
+  REQUISITION {
+    string req_id PK
+    string org_id FK
+    string ordering_contact_id FK
+    datetime received_at
+    string status
+  }
+  KIT {
+    string kit_id PK
+    string kit_type
+    datetime shipped_at
+  }
+  SPECIMEN_TUBE {
+    string tube_id PK
+    string req_id FK
+    string kit_id FK
+    string specimen_type
+    datetime collected_at
+    datetime accessioned_at
+  }
+  ALIQUOT {
+    string aliquot_id PK
+    string tube_id FK
+    float volume_ul
+    string storage_loc
+  }
+  PRODUCT {
+    string product_id PK
+    string name
+    string version
+  }
+  PRODUCT_ORDER {
+    string product_order_id PK
+    string req_id FK
+    string product_id FK
+    int quantity
+  }
+  WORK_ORDER {
+    string work_order_id PK
+    string product_order_id FK
+    string state
+  }
+  WORK_SET {
+    string work_set_id PK
+    string work_order_id FK
+    string stage
+  }
+  WORK_TASK {
+    string work_task_id PK
+    string work_set_id FK
+    string task_type
+    string state
+    datetime started_at
+    datetime completed_at
+  }
+  LIMS_RECORD {
+    string lims_record_id PK
+    string work_task_id FK
+    string entity_type
+    string entity_ref_id
+  }
+  INSTRUMENT_RUN {
+    string run_id PK
+    string instrument_id
+    string run_folder_uri
+    datetime started_at
+    datetime ended_at
+  }
+  QC_RESULT {
+    string qc_id PK
+    string target_type
+    string target_id
+    string metric
+    float value
+    string status
+  }
+  ANALYSIS_RUN {
+    string analysis_run_id PK
+    string pipeline_id
+    string pipeline_version
+    string execution_id
+  }
+  DATA_ASSET {
+    string asset_id PK
+    string kind
+    string uri
+    string checksum
+  }
+  STORAGE_LOCATION {
+    string storage_id PK
+    string provider
+    string bucket_or_path
+    string retention_policy
+  }
+  REPORT {
+    string report_id PK
+    string analysis_run_id FK
+    datetime released_at
+  }
+  DEVIATION {
+    string deviation_id PK
+    string severity
+    string category
+    datetime opened_at
+    datetime closed_at
+  }
+  INVENTORY_ITEM {
+    string item_id PK
+    string sku
+    string lot
+    datetime expires_at
+    int on_hand
+  }
+  PURCHASE_ORDER {
+    string po_id PK
+    string vendor
+    datetime ordered_at
+    string status
+  }
+```
+
+
 # say-what
 
 Framework to monitor public facing AI intelligence over time.
